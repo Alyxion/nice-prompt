@@ -204,7 +204,7 @@ def build_references_section(excluded_refs: list[tuple[str, str, str]], github_u
 
 
 def build_master_prompt(files: list[Path], excluded_refs: list[tuple[str, str, str]], 
-                        github_url: str, online: bool) -> str:
+                        github_url: str, online: bool, root: Path) -> str:
     """Build the master prompt from all files."""
     sections = []
     
@@ -227,7 +227,7 @@ def build_master_prompt(files: list[Path], excluded_refs: list[tuple[str, str, s
         seen_content.add(content_hash)
         
         # Add section separator with source reference
-        relative_path = file_path.relative_to(file_path.parent.parent.parent)
+        relative_path = file_path.relative_to(root)
         if online:
             source_ref = f'{github_url}/blob/main/{relative_path}'
         else:
@@ -253,10 +253,10 @@ def count_tokens(text: str, model: str = 'gpt-4') -> int:
     return len(encoding.encode(text))
 
 
-def build_variant(variant: PromptVariant, github_url: str, output_dir: Path, online: bool) -> dict:
+def build_variant(variant: PromptVariant, github_url: str, output_dir: Path, root: Path, online: bool) -> dict:
     """Build a single prompt variant and return stats."""
     files, excluded_refs = collect_files_and_refs(variant)
-    master_prompt = build_master_prompt(files, excluded_refs, github_url, online)
+    master_prompt = build_master_prompt(files, excluded_refs, github_url, online, root)
     
     # Determine filename based on online/offline
     mode_suffix = '' if online else '_offline'
@@ -299,12 +299,12 @@ def main():
         print(f'[{variant.name}] {variant.description}')
         
         # Build online version
-        stats_online = build_variant(variant, args.github_url, output_dir, online=True)
+        stats_online = build_variant(variant, args.github_url, output_dir, root, online=True)
         results.append(stats_online)
         print(f'  -> {stats_online["file"].name}: {stats_online["files_count"]} files, {stats_online["refs_count"]} refs, {stats_online["tokens"]:,} tokens')
         
         # Build offline version
-        stats_offline = build_variant(variant, args.github_url, output_dir, online=False)
+        stats_offline = build_variant(variant, args.github_url, output_dir, root, online=False)
         results.append(stats_offline)
         print(f'  -> {stats_offline["file"].name}: {stats_offline["files_count"]} files, {stats_offline["refs_count"]} refs, {stats_offline["tokens"]:,} tokens')
     

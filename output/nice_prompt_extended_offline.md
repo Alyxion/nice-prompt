@@ -5,7 +5,7 @@ Complete reference for AI agents building NiceGUI applications.
 ---
 
 
-<!-- Source: nice-prompt/docs/nicegui_prompt.md -->
+<!-- Source: docs/nicegui_prompt.md -->
 
 # NiceGUI Development Guide for AI Agents
 

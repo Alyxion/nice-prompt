@@ -7,7 +7,7 @@ Source: https://github.com/Alyxion/nice-prompt
 ---
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/nice-prompt/docs/nicegui_prompt.md -->
+<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/nicegui_prompt.md -->
 
 # NiceGUI Development Guide for AI Agents
 
