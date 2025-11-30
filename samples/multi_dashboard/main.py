@@ -33,6 +33,7 @@ if __name__ in {'__main__', '__mp_main__'}:
     # Include static folder in reload watch paths
     ui.run(
         root,
+        show=False,
         title='Multi-Dashboard App',
         reload=True,
         uvicorn_reload_includes='*.py,*.js,*.css',

@@ -253,4 +253,4 @@ def main():
 
 
 if __name__ in {'__main__', '__mp_main__'}:
-    ui.run(title='Sub Pages Demo', reload=True)
+    ui.run(show=False, title='Sub Pages Demo', reload=True)

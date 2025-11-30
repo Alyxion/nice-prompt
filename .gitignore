@@ -204,6 +204,7 @@ cython_debug/
 # Marimo
 marimo/_static/
 marimo/_lsp/
+.DS_Store
 __marimo__/
 
 .failed_urls.json

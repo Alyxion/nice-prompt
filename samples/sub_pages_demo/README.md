@@ -1,5 +1,7 @@
 # Sub Pages Demo - Multi-App Navigation
 
+![Screenshot](screenshot.jpg)
+
 A demonstration of NiceGUI's `ui.sub_pages` for building Single Page Applications (SPAs) with persistent client state.
 
 ## Features

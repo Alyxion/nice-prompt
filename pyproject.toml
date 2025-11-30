@@ -1,7 +1,7 @@
 [project]
 name = "nice-prompt"
 version = "0.1.0"
-description = ""
+description = "Prompts, patterns, and examples for AI coding assistants to generate NiceGUI code"
 authors = [
     {name = "Michael Ikemann",email = "michael.ikemann@gmail.com"}
 ]
@@ -13,6 +13,8 @@ dependencies = [
     "pillow (>=12.0.0,<13.0.0)"
 ]
 
+[tool.poetry]
+packages = [{include = "scripts"}]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
@@ -24,4 +26,5 @@ pytest-asyncio = "^1.3.0"
 httpx = "^0.28.1"
 tiktoken = "^0.12.0"
 pyyaml = "^6.0.3"
+selenium = "^4.27.0"
 

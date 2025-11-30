@@ -6,6 +6,10 @@
 [![NiceGUI](https://img.shields.io/badge/NiceGUI-3.3+-green.svg)](https://nicegui.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+<p align="center">
+  <img src="samples/showcase.gif" alt="Sample Applications" width="600">
+</p>
+
 A comprehensive toolkit of prompts, patterns, and examples that help AI coding assistants generate correct, idiomatic [NiceGUI](https://nicegui.io/) code.
 
 ## ✨ Features

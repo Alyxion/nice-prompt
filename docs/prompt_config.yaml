@@ -6,6 +6,8 @@ main_guide: nicegui_prompt.md
 
 # Mechanics - core patterns in learning order
 mechanics:
+  - file: poetry_setup.md
+    summary: "Poetry for dependency management: pyproject.toml, poetry install, poetry run python, adding dependencies"
   - file: application_structure.md
     summary: "App setup, ui.run(), @ui.page decorator, main.py structure, auto-index pages"
   - file: pages.md
@@ -89,9 +91,10 @@ samples:
   - name: dashboard
     path: samples/dashboard/
     summary: |
-      Simple sales dashboard. Single-file app demonstrating core patterns.
-      Demonstrates: dataclass with get_current(), bind_value/bind_text_from,
-      container.clear() pattern, on_value_change for recomputation.
+      Analytics dashboard showcasing 8 chart types and input controls with OO architecture.
+      Demonstrates: Dashboard class with current(), DashboardData dataclass, ui.echart()
+      for line/bar/pie/gauge/radar/heatmap/scatter/candlestick, ui.timer() for real-time
+      updates, ui.dialog() for settings, filter controls that update all charts/KPIs.
 
   - name: stock_peers
     path: samples/stock_peers/

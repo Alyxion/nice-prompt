@@ -1,5 +1,7 @@
 # Stock Peer Analysis Dashboard
 
+![Screenshot](screenshot.jpg)
+
 Compare multiple stocks against their peer group average.
 
 ## Features
