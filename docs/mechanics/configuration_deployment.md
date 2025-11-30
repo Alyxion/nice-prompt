@@ -39,6 +39,17 @@ ui.run(
 | `uvicorn_reload_excludes` | `'.*, .py[cod], .sw.*, ~*'` | Glob patterns to ignore |
 | `uvicorn_logging_level` | `'warning'` | Uvicorn log level |
 
+### Port Conflicts
+
+If you see `Address already in use` errors, **do not change the port**. Instead, kill the existing process:
+
+```bash
+# Kill process using port 8080
+lsof -ti :8080 | xargs kill
+```
+
+Changing ports leads to confusion with multiple servers running simultaneously.
+
 **Tip:** For custom component development, include JS/CSS/HTML files:
 
 ```python

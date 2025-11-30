@@ -10,6 +10,8 @@ mechanics:
     summary: "App setup, ui.run(), @ui.page decorator, main.py structure, auto-index pages"
   - file: pages.md
     summary: "Routing with @ui.page, path parameters, query params, ui.navigate, ui.open, shared layouts"
+  - file: sub_pages.md
+    summary: "ui.sub_pages for SPA routing, client-side navigation without reload, persistent app.storage.client state, nested routes, PageArguments"
   - file: container_updates.md
     summary: "Dynamic content: container.clear(), @ui.refreshable, container.refresh(), move/remove elements"
   - file: data_modeling.md
@@ -63,3 +65,44 @@ classes:
 # Files to exclude from master prompt
 exclude:
   - "*_references.md"          # URL references not needed
+
+# Sample applications for reference
+# GitHub: https://github.com/Alyxion/nice-prompt/tree/main/samples
+# Local: samples/
+samples:
+  - name: multi_dashboard
+    path: samples/multi_dashboard/
+    summary: |
+      Full SPA with authentication, signed cookie persistence, role-based permissions.
+      Demonstrates: ui.sub_pages, AppLayout class, login page as sub_page, header/drawer
+      visibility toggle, page auto-discovery, external CSS/JS, ECharts, dark mode.
+      Key files: main.py (server setup), layout.py (AppLayout), models/auth.py (AuthSession
+      with signed cookies), pages/ (auto-discovered page modules), static/ (CSS/JS).
+
+  - name: sub_pages_demo
+    path: samples/sub_pages_demo/
+    summary: |
+      SPA navigation with persistent client state. Single-file demo of ui.sub_pages.
+      Demonstrates: nested sub_pages, app.storage.client persistence, navigation drawer,
+      timer that keeps running across navigation, notes that persist during session.
+
+  - name: dashboard
+    path: samples/dashboard/
+    summary: |
+      Simple sales dashboard. Single-file app demonstrating core patterns.
+      Demonstrates: dataclass with get_current(), bind_value/bind_text_from,
+      container.clear() pattern, on_value_change for recomputation.
+
+  - name: stock_peers
+    path: samples/stock_peers/
+    summary: |
+      Stock comparison dashboard with async data loading.
+      Demonstrates: dark mode, run.io_bound() for API calls, ui.echart(),
+      ui.chip() for toggles, ui.timer() for initial load, custom CSS.
+
+  - name: bouncing_circle
+    path: samples/bouncing_circle/
+    summary: |
+      Custom JavaScript/Vue component with server-side PIL rendering.
+      Demonstrates: Element subclass with component='*.js', run_method(),
+      event-driven frame requests, base64 image transfer, Vue lifecycle hooks.

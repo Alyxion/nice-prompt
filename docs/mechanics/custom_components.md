@@ -477,6 +477,67 @@ ui.run(reload=True, uvicorn_reload_includes='*.js,*.css,*.html')
 
 This watches your component files for changes and automatically reloads the browser.
 
+## Dynamic Route Registration
+
+Components that need server endpoints (like file uploads) can register routes dynamically at runtime.
+
+### Registering Routes
+
+```python
+from nicegui import app
+from nicegui.element import Element
+
+class MyUploader(Element, component='uploader.js'):
+    def __init__(self) -> None:
+        super().__init__()
+        # Build unique URL using client and element IDs
+        self._props['url'] = f'/_nicegui/client/{self.client.id}/upload/{self.id}'
+        
+        # Register the route dynamically
+        @app.post(self._props['url'])
+        async def upload_route(request: Request) -> dict:
+            # Handle the upload...
+            return {'status': 'success'}
+```
+
+### URL Pattern Guidelines
+
+| Pattern | Example | Use Case |
+|---------|---------|----------|
+| `/_nicegui/client/{client_id}/{action}/{element_id}` | `/_nicegui/client/abc123/upload/42` | Per-client, per-element endpoints |
+| `/_nicegui/auto/static/{hash}/{filename}` | `/_nicegui/auto/static/def456/file.pdf` | Auto-generated static files |
+
+**Important**: Always use the `/_nicegui/` prefix for dynamic routes to avoid conflicts with user-defined pages and the root page fallback.
+
+### Cleaning Up Routes
+
+Always remove routes when the element is deleted to prevent memory leaks:
+
+```python
+class MyUploader(Element, component='uploader.js'):
+    def __init__(self) -> None:
+        super().__init__()
+        self._props['url'] = f'/_nicegui/client/{self.client.id}/upload/{self.id}'
+        
+        @app.post(self._props['url'])
+        async def upload_route(request: Request) -> dict:
+            return {'status': 'success'}
+    
+    def _handle_delete(self) -> None:
+        # Remove the route when element is deleted
+        app.remove_route(self._props['url'])
+        super()._handle_delete()
+```
+
+### Why Dynamic Routes Work with Root Pages
+
+Dynamic routes are registered as real FastAPI routes, which are matched **before** the 404 handler that serves root pages. This means:
+
+1. Request to `/_nicegui/client/.../upload/...` → matches the dynamic route
+2. Request to `/any/other/path` → no match → 404 handler → root page (if defined)
+
+See [Routing Architecture](routing.md) for details on route precedence.
+
 ## Best Practices
 
 1. **Cleanup in unmounted** - Always destroy third-party library instances
@@ -485,6 +546,7 @@ This watches your component files for changes and automatically reloads the brow
 4. **Bundle dependencies** - Use ESM for npm packages
 5. **Handle async initialization** - Use `mounted()` for setup that needs DOM
 6. **Validate props** - Define prop types in JavaScript
+7. **Clean up dynamic routes** - Always call `app.remove_route()` in `_handle_delete()`
 
 ## Debugging
 

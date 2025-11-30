@@ -118,6 +118,84 @@ ui.label('Custom Styled').classes('my-custom-class')
 ui.card().classes('highlight')
 ```
 
+## External CSS Files (Recommended)
+
+For larger applications, use external CSS files:
+
+### Setup Static Files
+
+```python
+from pathlib import Path
+from nicegui import app, ui
+
+# Serve static files
+STATIC_DIR = Path(__file__).parent / 'static'
+app.add_static_files('/static', STATIC_DIR)
+
+def root():
+    # Include CSS file
+    ui.add_head_html('<link rel="stylesheet" href="/static/css/app.css">')
+    # ... rest of page
+```
+
+### CSS File with Variables
+
+```css
+/* static/css/app.css */
+
+/* CSS Variables for theming */
+:root {
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+    --text-primary: #1e293b;
+    --bg-primary: #ffffff;
+    --border-color: #e2e8f0;
+}
+
+/* Dark mode overrides */
+.body--dark {
+    --text-primary: #f1f5f9;
+    --bg-primary: #0f172a;
+    --border-color: #334155;
+}
+
+/* Ensure full-width layouts */
+.nicegui-content,
+.nicegui-sub-pages,
+.q-page,
+.q-page-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* Dashboard content max-width */
+.dashboard-content {
+    width: 100%;
+    max-width: 1920px;
+}
+
+/* Custom component styles */
+.login-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem;
+}
+```
+
+### File Organization
+
+```
+my_app/
+├── static/
+│   ├── css/
+│   │   └── app.css
+│   └── js/
+│       └── app.js
+├── main.py
+└── ...
+```
+
 ### Global Styles
 
 ```python
@@ -154,6 +232,26 @@ ui.add_head_html('''
     body { font-family: 'Inter', sans-serif; }
 </style>
 ''')
+```
+
+## Full-Width Layout Fix
+
+NiceGUI's default content container may have a max-width. Override with CSS:
+
+```css
+/* Ensure all layout containers fill available width */
+.nicegui-content,
+.nicegui-sub-pages,
+.q-page,
+.q-page-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* Sub-pages content should also be full width */
+.nicegui-sub-pages > * {
+    width: 100%;
+}
 ```
 
 ## ui.add_css() - Simpler CSS Addition

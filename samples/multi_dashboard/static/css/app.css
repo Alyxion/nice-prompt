@@ -1,0 +1,334 @@
+/**
+ * Multi-Dashboard Application Styles
+ * Custom CSS to enhance the NiceGUI default styling
+ */
+
+/* ============================================================================
+   CSS Variables - Theme Configuration
+   ============================================================================ */
+:root {
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+    --primary-light: #e0e7ff;
+    --danger-color: #ef4444;
+    --success-color: #22c55e;
+    --warning-color: #f59e0b;
+    
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #f1f5f9;
+    
+    --border-color: #e2e8f0;
+    --border-radius: 8px;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    
+    --transition-fast: 150ms ease;
+    --transition-normal: 250ms ease;
+}
+
+/* Dark mode overrides */
+.body--dark {
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    
+    --border-color: #334155;
+}
+
+/* ============================================================================
+   Global Styles
+   ============================================================================ */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================================
+   Login Page Styles
+   ============================================================================ */
+.login-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-lg);
+    border-radius: 12px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-card .login-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.login-card .login-subtitle {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.login-card .q-input {
+    margin-bottom: 1rem;
+}
+
+.login-card .login-hint {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 1rem;
+}
+
+/* ============================================================================
+   Header Styles
+   ============================================================================ */
+.app-header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+    box-shadow: var(--shadow-md);
+}
+
+.app-header .app-title {
+    font-weight: 600;
+    letter-spacing: -0.025em;
+}
+
+/* ============================================================================
+   Navigation Drawer Styles
+   ============================================================================ */
+.nav-drawer {
+    border-right: 1px solid var(--border-color);
+}
+
+.nav-drawer .nav-header {
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.nav-drawer .q-item {
+    border-radius: var(--border-radius);
+    margin: 0.25rem 0.5rem;
+    transition: background-color var(--transition-fast);
+}
+
+.nav-drawer .q-item:hover {
+    background-color: var(--bg-tertiary);
+}
+
+.nav-drawer .q-item--active {
+    background-color: var(--primary-light);
+}
+
+.body--dark .nav-drawer .q-item--active {
+    background-color: rgba(79, 70, 229, 0.2);
+}
+
+/* ============================================================================
+   Dashboard Card Styles
+   ============================================================================ */
+.dashboard-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--transition-normal), transform var(--transition-normal);
+}
+
+.dashboard-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.dashboard-card .card-title {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-card .card-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.dashboard-card .card-subtitle {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* ============================================================================
+   Metric Cards
+   ============================================================================ */
+.metric-card {
+    padding: 1.25rem;
+    border-radius: var(--border-radius);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+}
+
+.metric-card .metric-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.metric-card .metric-icon.primary {
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+}
+
+.metric-card .metric-icon.success {
+    background-color: #dcfce7;
+    color: var(--success-color);
+}
+
+.metric-card .metric-icon.warning {
+    background-color: #fef3c7;
+    color: var(--warning-color);
+}
+
+.metric-card .metric-icon.danger {
+    background-color: #fee2e2;
+    color: var(--danger-color);
+}
+
+/* ============================================================================
+   User Menu Styles
+   ============================================================================ */
+.user-menu {
+    min-width: 200px;
+}
+
+.user-menu .user-info {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.user-menu .user-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.user-menu .user-roles {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* ============================================================================
+   Button Enhancements
+   ============================================================================ */
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* ============================================================================
+   Page Transitions
+   ============================================================================ */
+.page-enter {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.page-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity var(--transition-normal), transform var(--transition-normal);
+}
+
+/* ============================================================================
+   Scrollbar Styling
+   ============================================================================ */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--text-muted);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+
+/* ============================================================================
+   Dashboard Content Layout
+   ============================================================================ */
+
+/* Ensure all layout containers fill available width */
+.nicegui-content,
+.nicegui-sub-pages,
+.q-page,
+.q-page-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* Sub-pages content should also be full width */
+.nicegui-sub-pages > * {
+    width: 100%;
+}
+
+.dashboard-content {
+    width: 100%;
+    max-width: 1920px;
+}
+
+/* ============================================================================
+   Utility Classes
+   ============================================================================ */
+.max-w-fhd {
+    max-width: 1920px;
+}
+
+.max-w-content {
+    max-width: 1400px;
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #7c3aed 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.glass-effect {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.body--dark .glass-effect {
+    background: rgba(15, 23, 42, 0.8);
+}

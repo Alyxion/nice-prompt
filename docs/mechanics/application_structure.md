@@ -38,6 +38,8 @@ Without the guard:
 
 ## Recommended Project Structure
 
+### Multi-Page Application (with @ui.page)
+
 ```
 my_app/
 ├── main.py              # Entry point with ui.run()
@@ -54,6 +56,94 @@ my_app/
 ├── requirements.txt
 └── pyproject.toml
 ```
+
+### SPA with Sub Pages (Recommended for Dashboards)
+
+For single-page applications with client-side routing:
+
+```
+my_app/
+├── main.py              # Server setup only (static files, page discovery, ui.run)
+├── layout.py            # AppLayout class (header, drawer, routing, auth checks)
+├── models/
+│   ├── __init__.py      # Exports AuthSession, etc.
+│   └── auth.py          # AuthSession dataclass, USERS, ROLE_PERMISSIONS
+├── pages/
+│   ├── home/
+│   │   ├── __init__.py      # Exports only
+│   │   └── home.py          # Implementation
+│   ├── settings/
+│   │   ├── __init__.py
+│   │   └── settings.py
+│   └── ...
+├── static/
+│   ├── css/
+│   │   └── app.css          # Custom styles
+│   └── js/
+│       └── app.js           # Custom JavaScript
+└── pyproject.toml
+```
+
+### Separation of Concerns
+
+**`main.py`** - Server setup only:
+```python
+from pathlib import Path
+from nicegui import app, ui
+from layout import AppLayout
+
+STATIC_DIR = Path(__file__).parent / 'static'
+PAGES_DIR = Path(__file__).parent / 'pages'
+
+app.add_static_files('/static', STATIC_DIR)
+AppLayout.discover_pages(str(PAGES_DIR), exclude={'login'})
+
+def root():
+    AppLayout.current().build()
+
+if __name__ in {'__main__', '__mp_main__'}:
+    ui.run(
+        root,
+        title='My App',
+        reload=True,
+        uvicorn_reload_includes='*.py,*.js,*.css',
+    )
+```
+
+**`layout.py`** - All UI logic (header, drawer, navigation, auth checks)
+
+### Module Organization
+
+Keep `__init__.py` files minimal - they should only export:
+
+```python
+# pages/home/__init__.py
+"""Home page module."""
+from .home import HomePage
+
+__all__ = ['HomePage']
+```
+
+Implementation goes in a separate file:
+
+```python
+# pages/home/home.py
+"""Home page implementation."""
+from nicegui import ui
+
+class HomePage:
+    PAGE = {'path': '/', 'label': 'Home', 'icon': 'home'}
+    
+    async def build(self) -> None:
+        ui.label('Welcome!')
+```
+
+This pattern:
+- Keeps imports clean
+- Avoids circular dependencies  
+- Makes it clear what each module exports
+- Allows IDE navigation to the actual implementation
+- **Names files after content** - `home.py` not `page.py` or `dashboard.py`
 
 ### main.py
 ```python

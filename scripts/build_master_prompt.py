@@ -236,8 +236,38 @@ def build_references_section(excluded_refs: list[tuple[str, str, str]], github_u
     return '\n'.join(lines)
 
 
+def build_samples_section(config: dict, github_url: str, online: bool) -> str:
+    """Build a section listing sample applications."""
+    samples = config.get('samples', [])
+    if not samples:
+        return ''
+    
+    lines = [
+        '\n---\n',
+        '## Sample Applications\n',
+        'Reference implementations demonstrating NiceGUI patterns:\n',
+    ]
+    
+    for sample in samples:
+        name = sample.get('name', '')
+        path = sample.get('path', '')
+        summary = sample.get('summary', '').strip()
+        
+        if online:
+            ref = f'{github_url}/tree/main/{path}'
+        else:
+            ref = path
+        
+        lines.append(f'\n### {name}\n')
+        lines.append(f'**Location**: `{ref}`\n')
+        if summary:
+            lines.append(f'{summary}\n')
+    
+    return '\n'.join(lines)
+
+
 def build_master_prompt(files: list[Path], excluded_refs: list[tuple[str, str, str]], 
-                        github_url: str, online: bool, root: Path) -> str:
+                        github_url: str, online: bool, root: Path, config: dict) -> str:
     """Build the master prompt from all files."""
     sections = []
     
@@ -277,6 +307,11 @@ def build_master_prompt(files: list[Path], excluded_refs: list[tuple[str, str, s
     if refs_section:
         sections.append(refs_section)
     
+    # Add samples section
+    samples_section = build_samples_section(config, github_url, online)
+    if samples_section:
+        sections.append(samples_section)
+    
     return '\n'.join(sections)
 
 
@@ -291,8 +326,9 @@ def count_tokens(text: str, model: str = 'gpt-4') -> int:
 
 def build_variant(variant: PromptVariant, github_url: str, output_dir: Path, root: Path, online: bool) -> dict:
     """Build a single prompt variant and return stats."""
+    config = load_config()
     files, excluded_refs = collect_files_and_refs(variant)
-    master_prompt = build_master_prompt(files, excluded_refs, github_url, online, root)
+    master_prompt = build_master_prompt(files, excluded_refs, github_url, online, root, config)
     
     # Determine filename based on online/offline
     mode_suffix = '' if online else '_offline'

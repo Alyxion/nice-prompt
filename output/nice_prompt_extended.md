@@ -226,6 +226,8 @@ Without the guard:
 
 ## Recommended Project Structure
 
+### Multi-Page Application (with @ui.page)
+
 ```
 my_app/
 ├── main.py              # Entry point with ui.run()
@@ -242,6 +244,94 @@ my_app/
 ├── requirements.txt
 └── pyproject.toml
 ```
+
+### SPA with Sub Pages (Recommended for Dashboards)
+
+For single-page applications with client-side routing:
+
+```
+my_app/
+├── main.py              # Server setup only (static files, page discovery, ui.run)
+├── layout.py            # AppLayout class (header, drawer, routing, auth checks)
+├── models/
+│   ├── __init__.py      # Exports AuthSession, etc.
+│   └── auth.py          # AuthSession dataclass, USERS, ROLE_PERMISSIONS
+├── pages/
+│   ├── home/
+│   │   ├── __init__.py      # Exports only
+│   │   └── home.py          # Implementation
+│   ├── settings/
+│   │   ├── __init__.py
+│   │   └── settings.py
+│   └── ...
+├── static/
+│   ├── css/
+│   │   └── app.css          # Custom styles
+│   └── js/
+│       └── app.js           # Custom JavaScript
+└── pyproject.toml
+```
+
+### Separation of Concerns
+
+**`main.py`** - Server setup only:
+```python
+from pathlib import Path
+from nicegui import app, ui
+from layout import AppLayout
+
+STATIC_DIR = Path(__file__).parent / 'static'
+PAGES_DIR = Path(__file__).parent / 'pages'
+
+app.add_static_files('/static', STATIC_DIR)
+AppLayout.discover_pages(str(PAGES_DIR), exclude={'login'})
+
+def root():
+    AppLayout.current().build()
+
+if __name__ in {'__main__', '__mp_main__'}:
+    ui.run(
+        root,
+        title='My App',
+        reload=True,
+        uvicorn_reload_includes='*.py,*.js,*.css',
+    )
+```
+
+**`layout.py`** - All UI logic (header, drawer, navigation, auth checks)
+
+### Module Organization
+
+Keep `__init__.py` files minimal - they should only export:
+
+```python
+# pages/home/__init__.py
+"""Home page module."""
+from .home import HomePage
+
+__all__ = ['HomePage']
+```
+
+Implementation goes in a separate file:
+
+```python
+# pages/home/home.py
+"""Home page implementation."""
+from nicegui import ui
+
+class HomePage:
+    PAGE = {'path': '/', 'label': 'Home', 'icon': 'home'}
+    
+    async def build(self) -> None:
+        ui.label('Welcome!')
+```
+
+This pattern:
+- Keeps imports clean
+- Avoids circular dependencies  
+- Makes it clear what each module exports
+- Allows IDE navigation to the actual implementation
+- **Names files after content** - `home.py` not `page.py` or `dashboard.py`
 
 ### main.py
 ```python
@@ -598,12 +688,374 @@ async def data_page():
     ui.label(f'Data: {data}')
 ```
 
+## Root Page Mechanism
+
+When you pass a `root` function to `ui.run()`, it acts as a **catch-all** for any URL that doesn't match an explicit `@ui.page` route:
+
+```python
+from nicegui import ui
+
+@ui.page('/about')
+def about():
+    ui.label('About')  # Only handles /about
+
+def root():
+    ui.label('Main')   # Handles /, /foo, /bar/baz, etc.
+
+ui.run(root)
+```
+
+This works via the 404 exception handler - unmatched URLs trigger the root page instead of showing an error.
+
+### Route Precedence
+
+1. Explicit `@ui.page` routes are matched first
+2. Internal `/_nicegui/*` routes (uploads, static files) are matched next
+3. If nothing matches, the root page is served (if defined)
+
+See [Routing Architecture](https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/routing.md) for detailed explanation.
+
 ## Important Notes
 
 1. **One function per route** - Each path needs its own decorated function
 2. **Function runs on each visit** - Don't put expensive setup in page functions
 3. **Elements are scoped** - UI elements belong to the page/client that created them
 4. **Use storage for persistence** - `app.storage.user` persists across page visits
+5. **Root page catches all** - When using `ui.run(root)`, unmatched URLs go to root
+
+
+
+<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/sub_pages.md -->
+
+# NiceGUI Sub Pages - Client-Side Routing
+
+`ui.sub_pages` enables **Single Page Application (SPA)** routing within NiceGUI. Navigation between views happens client-side without full page reloads.
+
+## Key Advantages
+
+- **Persistent State**: `app.storage.client` stays alive across sub-page navigation - objects remain "living"
+- **Fast Navigation**: No script reload, instant view switching
+- **Shared Layout**: Header, sidebar, and other elements persist across routes
+
+## How It Works with Server Routing
+
+When using `ui.sub_pages` with a root page, two routing layers work together:
+
+1. **Server-side (404 fallback)**: The root page catches ALL unmatched URLs
+2. **Client-side (sub_pages)**: JavaScript handles navigation without page reloads
+
+```
+Browser requests /about
+    ↓
+Server: No explicit @ui.page('/about') route
+    ↓
+404 handler: core.root exists → serve root page
+    ↓
+Client: ui.sub_pages matches '/about' → render about content
+```
+
+This is why you **don't need** a catch-all `@ui.page('/{_:path}')` pattern - the root page mechanism already captures all URLs.
+
+See [Routing Architecture](https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/routing.md) for detailed explanation of route precedence.
+
+## Basic Usage
+
+```python
+from nicegui import ui
+
+@ui.page('/')
+def main_page():
+    with ui.header():
+        ui.button('Home', on_click=lambda: ui.navigate.to('/'))
+        ui.button('About', on_click=lambda: ui.navigate.to('/about'))
+        ui.button('User', on_click=lambda: ui.navigate.to('/user/123'))
+    
+    ui.sub_pages({
+        '/': home_page,
+        '/about': about_page,
+        '/user/{id}': user_page,
+    })
+
+def home_page():
+    ui.label('Welcome to the home page')
+
+def about_page():
+    ui.label('About us')
+
+def user_page(id: str):
+    ui.label(f'User profile: {id}')
+
+ui.run()
+```
+
+> **Note**: The catch-all pattern `@ui.page('/{_:path}')` is **not required**. `ui.sub_pages` handles client-side routing internally - navigation between sub-pages happens without server round-trips.
+
+## Route Patterns
+
+Routes support path parameters using `{param_name}` syntax:
+
+| Pattern | Matches | Parameters |
+|---------|---------|------------|
+| `/` | Exact root | None |
+| `/about` | Exact path | None |
+| `/user/{id}` | `/user/123` | `id='123'` |
+| `/post/{category}/{id}` | `/post/tech/42` | `category='tech'`, `id='42'` |
+
+## Page Builder Functions
+
+Builder functions receive path parameters as keyword arguments:
+
+```python
+def user_page(id: str):
+    ui.label(f'Viewing user {id}')
+
+def product_page(category: str, product_id: str):
+    ui.label(f'Product {product_id} in {category}')
+```
+
+## PageArguments for Advanced Access
+
+Use `PageArguments` type hint for full route information:
+
+```python
+from nicegui.page_arguments import PageArguments
+
+def search_page(args: PageArguments):
+    ui.label(f'Path: {args.path}')
+    ui.label(f'Parameters: {args.parameters}')
+    ui.label(f'Query: {args.query_params.get("q")}')  # ?q=value
+    ui.label(f'Fragment: {args.fragment}')             # #section
+```
+
+## Constructor Parameters
+
+```python
+ui.sub_pages(
+    routes={...},              # Path pattern → builder function
+    root_path='/app',          # Path prefix to strip (reverse proxy)
+    data={'key': 'value'},     # Data passed to all builders
+    show_404=True,             # Show 404 for unmatched routes
+)
+```
+
+## Dynamic Route Addition
+
+```python
+router = ui.sub_pages({'/': home})
+router.add('/settings', settings_page)
+router.add('/profile/{username}', profile_page)
+```
+
+## Nested Sub Pages
+
+```python
+def admin_section():
+    ui.label('Admin Panel')
+    ui.sub_pages({
+        '/users': admin_users,
+        '/settings': admin_settings,
+    })
+
+# Main router includes admin section
+ui.sub_pages({
+    '/': home,
+    '/admin': admin_section,  # Nested routing
+})
+```
+
+## Navigation
+
+```python
+ui.button('Home', on_click=lambda: ui.navigate.to('/'))
+ui.button('Search', on_click=lambda: ui.navigate.to('/search?q=nicegui'))
+ui.button('Section', on_click=lambda: ui.navigate.to('/docs#installation'))
+```
+
+## Async Page Builders
+
+```python
+async def user_page(id: str):
+    ui.spinner()
+    user = await fetch_user(id)
+    ui.label(f'Name: {user.name}')
+```
+
+## Persistent Client State Example
+
+Since `app.storage.client` persists across sub-page navigation, you can maintain live objects:
+
+```python
+from nicegui import app, ui
+
+@ui.page('/')
+def spa():
+    # Initialize once, persists across all sub-pages
+    if 'counter' not in app.storage.client:
+        app.storage.client['counter'] = 0
+    
+    with ui.header():
+        ui.label().bind_text_from(app.storage.client, 'counter', 
+                                   backward=lambda c: f'Count: {c}')
+        ui.button('+', on_click=lambda: app.storage.client.update(
+            counter=app.storage.client['counter'] + 1))
+    
+    ui.sub_pages({
+        '/': page_a,
+        '/other': page_b,
+    })
+
+def page_a():
+    ui.label('Page A - counter persists when navigating!')
+    ui.button('Go to B', on_click=lambda: ui.navigate.to('/other'))
+
+def page_b():
+    ui.label('Page B - same counter value!')
+    ui.button('Go to A', on_click=lambda: ui.navigate.to('/'))
+```
+
+## Custom 404 Handling
+
+Subclass `SubPages` for custom error pages:
+
+```python
+from nicegui.elements.sub_pages import SubPages
+
+class CustomSubPages(SubPages):
+    def _render_404(self):
+        ui.label('Page not found!').classes('text-red-500')
+        ui.button('Go Home', on_click=lambda: ui.navigate.to('/'))
+
+# Use instead of ui.sub_pages
+CustomSubPages({'/': home, '/about': about})
+```
+
+## Route Protection
+
+Since sub pages only render **after** the parent page executes, authentication checks belong in the parent/layout page - not in individual sub pages.
+
+See [Authentication Pattern](https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/authentication.md) for a complete example with login page, session management, and role-based access.
+
+## Layout Constraints
+
+### Header/Drawer Must Be Outside sub_pages
+
+Top-level layout elements (`ui.header`, `ui.left_drawer`, `ui.footer`) **cannot** be nested inside `ui.sub_pages`. They must be created in the parent:
+
+```python
+# CORRECT - header/drawer at root level
+def root():
+    header = ui.header()
+    drawer = ui.left_drawer()
+    
+    with ui.column():
+        ui.sub_pages({...})
+
+# WRONG - will cause RuntimeError
+def root():
+    ui.sub_pages({
+        '/': lambda: ui.header()  # Error!
+    })
+```
+
+### Hiding Header/Drawer on Login Page
+
+Store references and toggle visibility. **Key pattern**: Call `show()` at the start of every regular page builder to handle back button navigation from login:
+
+```python
+class AppLayout:
+    def __init__(self):
+        self.header = None
+        self.drawer = None
+    
+    def hide(self):
+        if self.header:
+            self.header.set_visibility(False)
+        if self.drawer:
+            self.drawer.set_visibility(False)
+            self.drawer.hide()
+    
+    def show(self):
+        if self.header:
+            self.header.set_visibility(True)
+        if self.drawer:
+            self.drawer.set_visibility(True)
+            self.drawer.show()
+    
+    def build_login_page(self):
+        self.hide()  # Hide on login
+        # ... login form
+    
+    def make_page_builder(self, page_info):
+        async def builder():
+            self.show()  # Always show on regular pages (handles back button)
+            # ... page content
+        return builder
+    
+    def build(self):
+        self.header = ui.header()
+        self.drawer = ui.left_drawer()
+        
+        ui.sub_pages({
+            '/login': self.build_login_page,
+            '/': self.make_page_builder({'path': '/'}),
+        })
+```
+
+This pattern ensures header/drawer are restored when:
+- User clicks Cancel on login
+- User presses browser back button from login
+- User navigates to any regular page
+
+### Full-Width Content
+
+By default, NiceGUI may constrain content width. Add CSS to ensure full width:
+
+```css
+.nicegui-content,
+.nicegui-sub-pages,
+.q-page,
+.q-page-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+```
+
+## Login Page Integration
+
+**Key insight**: The login page should be a sub_page route, not a separate `@ui.page('/login')`:
+
+```python
+ui.sub_pages({
+    '/login': build_login_page,  # Part of same SPA
+    '/': home_page,
+    '/settings': settings_page,
+})
+```
+
+Benefits:
+- Session state (`app.storage.client`) persists across navigation
+- Header/drawer can be hidden/shown dynamically
+- No full page reload on login/logout
+
+## Avoiding Global Variables
+
+Don't use global variables for UI references. Instead, use a class stored in `app.storage.client`:
+
+```python
+class AppLayout:
+    @classmethod
+    def current(cls) -> 'AppLayout':
+        if 'layout' not in app.storage.client:
+            app.storage.client['layout'] = cls()
+        return app.storage.client['layout']
+
+def root():
+    AppLayout.current().build()
+```
+
+## Documentation
+
+- [NiceGUI Sub Pages](https://nicegui.io/documentation/sub_pages)
 
 
 
@@ -1377,6 +1829,84 @@ ui.label('Custom Styled').classes('my-custom-class')
 ui.card().classes('highlight')
 ```
 
+## External CSS Files (Recommended)
+
+For larger applications, use external CSS files:
+
+### Setup Static Files
+
+```python
+from pathlib import Path
+from nicegui import app, ui
+
+# Serve static files
+STATIC_DIR = Path(__file__).parent / 'static'
+app.add_static_files('/static', STATIC_DIR)
+
+def root():
+    # Include CSS file
+    ui.add_head_html('<link rel="stylesheet" href="/static/css/app.css">')
+    # ... rest of page
+```
+
+### CSS File with Variables
+
+```css
+/* static/css/app.css */
+
+/* CSS Variables for theming */
+:root {
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+    --text-primary: #1e293b;
+    --bg-primary: #ffffff;
+    --border-color: #e2e8f0;
+}
+
+/* Dark mode overrides */
+.body--dark {
+    --text-primary: #f1f5f9;
+    --bg-primary: #0f172a;
+    --border-color: #334155;
+}
+
+/* Ensure full-width layouts */
+.nicegui-content,
+.nicegui-sub-pages,
+.q-page,
+.q-page-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* Dashboard content max-width */
+.dashboard-content {
+    width: 100%;
+    max-width: 1920px;
+}
+
+/* Custom component styles */
+.login-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem;
+}
+```
+
+### File Organization
+
+```
+my_app/
+├── static/
+│   ├── css/
+│   │   └── app.css
+│   └── js/
+│       └── app.js
+├── main.py
+└── ...
+```
+
 ### Global Styles
 
 ```python
@@ -1413,6 +1943,26 @@ ui.add_head_html('''
     body { font-family: 'Inter', sans-serif; }
 </style>
 ''')
+```
+
+## Full-Width Layout Fix
+
+NiceGUI's default content container may have a max-width. Override with CSS:
+
+```css
+/* Ensure all layout containers fill available width */
+.nicegui-content,
+.nicegui-sub-pages,
+.q-page,
+.q-page-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* Sub-pages content should also be full width */
+.nicegui-sub-pages > * {
+    width: 100%;
+}
 ```
 
 ## ui.add_css() - Simpler CSS Addition
@@ -1964,6 +2514,67 @@ ui.run(reload=True, uvicorn_reload_includes='*.js,*.css,*.html')
 
 This watches your component files for changes and automatically reloads the browser.
 
+## Dynamic Route Registration
+
+Components that need server endpoints (like file uploads) can register routes dynamically at runtime.
+
+### Registering Routes
+
+```python
+from nicegui import app
+from nicegui.element import Element
+
+class MyUploader(Element, component='uploader.js'):
+    def __init__(self) -> None:
+        super().__init__()
+        # Build unique URL using client and element IDs
+        self._props['url'] = f'/_nicegui/client/{self.client.id}/upload/{self.id}'
+        
+        # Register the route dynamically
+        @app.post(self._props['url'])
+        async def upload_route(request: Request) -> dict:
+            # Handle the upload...
+            return {'status': 'success'}
+```
+
+### URL Pattern Guidelines
+
+| Pattern | Example | Use Case |
+|---------|---------|----------|
+| `/_nicegui/client/{client_id}/{action}/{element_id}` | `/_nicegui/client/abc123/upload/42` | Per-client, per-element endpoints |
+| `/_nicegui/auto/static/{hash}/{filename}` | `/_nicegui/auto/static/def456/file.pdf` | Auto-generated static files |
+
+**Important**: Always use the `/_nicegui/` prefix for dynamic routes to avoid conflicts with user-defined pages and the root page fallback.
+
+### Cleaning Up Routes
+
+Always remove routes when the element is deleted to prevent memory leaks:
+
+```python
+class MyUploader(Element, component='uploader.js'):
+    def __init__(self) -> None:
+        super().__init__()
+        self._props['url'] = f'/_nicegui/client/{self.client.id}/upload/{self.id}'
+        
+        @app.post(self._props['url'])
+        async def upload_route(request: Request) -> dict:
+            return {'status': 'success'}
+    
+    def _handle_delete(self) -> None:
+        # Remove the route when element is deleted
+        app.remove_route(self._props['url'])
+        super()._handle_delete()
+```
+
+### Why Dynamic Routes Work with Root Pages
+
+Dynamic routes are registered as real FastAPI routes, which are matched **before** the 404 handler that serves root pages. This means:
+
+1. Request to `/_nicegui/client/.../upload/...` → matches the dynamic route
+2. Request to `/any/other/path` → no match → 404 handler → root page (if defined)
+
+See [Routing Architecture](https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/routing.md) for details on route precedence.
+
 ## Best Practices
 
 1. **Cleanup in unmounted** - Always destroy third-party library instances
@@ -1972,6 +2583,7 @@ This watches your component files for changes and automatically reloads the brow
 4. **Bundle dependencies** - Use ESM for npm packages
 5. **Handle async initialization** - Use `mounted()` for setup that needs DOM
 6. **Validate props** - Define prop types in JavaScript
+7. **Clean up dynamic routes** - Always call `app.remove_route()` in `_handle_delete()`
 
 ## Debugging
 
@@ -2039,6 +2651,17 @@ ui.run(
 | `uvicorn_reload_includes` | `'*.py'` | Glob patterns that trigger reload |
 | `uvicorn_reload_excludes` | `'.*, .py[cod], .sw.*, ~*'` | Glob patterns to ignore |
 | `uvicorn_logging_level` | `'warning'` | Uvicorn log level |
+
+### Port Conflicts
+
+If you see `Address already in use` errors, **do not change the port**. Instead, kill the existing process:
+
+```bash
+# Kill process using port 8080
+lsof -ti :8080 | xargs kill
+```
+
+Changing ports leads to confusion with multiple servers running simultaneously.
 
 **Tip:** For custom component development, include JS/CSS/HTML files:
 
@@ -3856,3 +4479,57 @@ with ui.card() as card:
         ui.button('B')
 ```
 
+
+
+---
+
+## Sample Applications
+
+Reference implementations demonstrating NiceGUI patterns:
+
+
+### multi_dashboard
+
+**Location**: `https://github.com/Alyxion/nice-prompt/tree/main/samples/multi_dashboard/`
+
+Full SPA with authentication, signed cookie persistence, role-based permissions.
+Demonstrates: ui.sub_pages, AppLayout class, login page as sub_page, header/drawer
+visibility toggle, page auto-discovery, external CSS/JS, ECharts, dark mode.
+Key files: main.py (server setup), layout.py (AppLayout), models/auth.py (AuthSession
+with signed cookies), pages/ (auto-discovered page modules), static/ (CSS/JS).
+
+
+### sub_pages_demo
+
+**Location**: `https://github.com/Alyxion/nice-prompt/tree/main/samples/sub_pages_demo/`
+
+SPA navigation with persistent client state. Single-file demo of ui.sub_pages.
+Demonstrates: nested sub_pages, app.storage.client persistence, navigation drawer,
+timer that keeps running across navigation, notes that persist during session.
+
+
+### dashboard
+
+**Location**: `https://github.com/Alyxion/nice-prompt/tree/main/samples/dashboard/`
+
+Simple sales dashboard. Single-file app demonstrating core patterns.
+Demonstrates: dataclass with get_current(), bind_value/bind_text_from,
+container.clear() pattern, on_value_change for recomputation.
+
+
+### stock_peers
+
+**Location**: `https://github.com/Alyxion/nice-prompt/tree/main/samples/stock_peers/`
+
+Stock comparison dashboard with async data loading.
+Demonstrates: dark mode, run.io_bound() for API calls, ui.echart(),
+ui.chip() for toggles, ui.timer() for initial load, custom CSS.
+
+
+### bouncing_circle
+
+**Location**: `https://github.com/Alyxion/nice-prompt/tree/main/samples/bouncing_circle/`
+
+Custom JavaScript/Vue component with server-side PIL rendering.
+Demonstrates: Element subclass with component='*.js', run_method(),
+event-driven frame requests, base64 image transfer, Vue lifecycle hooks.

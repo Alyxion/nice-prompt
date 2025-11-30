@@ -174,9 +174,37 @@ async def data_page():
     ui.label(f'Data: {data}')
 ```
 
+## Root Page Mechanism
+
+When you pass a `root` function to `ui.run()`, it acts as a **catch-all** for any URL that doesn't match an explicit `@ui.page` route:
+
+```python
+from nicegui import ui
+
+@ui.page('/about')
+def about():
+    ui.label('About')  # Only handles /about
+
+def root():
+    ui.label('Main')   # Handles /, /foo, /bar/baz, etc.
+
+ui.run(root)
+```
+
+This works via the 404 exception handler - unmatched URLs trigger the root page instead of showing an error.
+
+### Route Precedence
+
+1. Explicit `@ui.page` routes are matched first
+2. Internal `/_nicegui/*` routes (uploads, static files) are matched next
+3. If nothing matches, the root page is served (if defined)
+
+See [Routing Architecture](routing.md) for detailed explanation.
+
 ## Important Notes
 
 1. **One function per route** - Each path needs its own decorated function
 2. **Function runs on each visit** - Don't put expensive setup in page functions
 3. **Elements are scoped** - UI elements belong to the page/client that created them
 4. **Use storage for persistence** - `app.storage.user` persists across page visits
+5. **Root page catches all** - When using `ui.run(root)`, unmatched URLs go to root

@@ -123,6 +123,18 @@ if __name__ in {'__main__', '__mp_main__'}:
     ui.run(show=False, title='My App')
 ```
 
+### Hot Reload for Static Files
+
+Include JS/CSS in reload watch:
+
+```python
+ui.run(
+    root,
+    reload=True,
+    uvicorn_reload_includes='*.py,*.js,*.css',
+)
+```
+
 ### Per-User Data
 
 Never use global variables. Use `app.storage.client`:
@@ -133,11 +145,37 @@ class UserData:
     name: str = ''
     
     @classmethod
-    def get_current(cls) -> 'UserData':
+    def current(cls) -> 'UserData':
         if 'user_data' not in app.storage.client:
             app.storage.client['user_data'] = cls()
         return app.storage.client['user_data']
 ```
+
+### File Organization for SPAs
+
+For SPA applications with `ui.sub_pages`:
+
+```
+my_app/
+├── main.py         # Server setup only (static files, page discovery, ui.run)
+├── layout.py       # AppLayout class (header, drawer, routing, auth checks)
+├── auth.py         # AuthSession dataclass, USERS, ROLE_PERMISSIONS
+├── pages/
+│   ├── home/
+│   │   ├── __init__.py   # Exports only: from .home import HomePage
+│   │   └── home.py       # Implementation
+│   └── ...
+└── static/
+    ├── css/
+    │   └── app.css
+    └── js/
+        └── app.js
+```
+
+Key principles:
+- **`__init__.py` exports only** - No implementation code
+- **Name files after content** - `home.py` not `page.py` or `dashboard.py`
+- **Separate layout from server setup** - `main.py` stays minimal
 
 ### Container Updates
 
@@ -148,3 +186,12 @@ with container:
 ```
 
 Or use `@ui.refreshable` for simpler cases.
+
+## Rule Placement
+
+**Mechanic-specific rules belong in the relevant `docs/mechanics/` files**, not here. This file only covers general project maintenance principles.
+
+Examples:
+- Port conflict handling → `docs/mechanics/configuration_deployment.md`
+- Routing patterns → `docs/mechanics/routing.md`
+- Authentication patterns → `docs/mechanics/authentication.md`
