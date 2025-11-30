@@ -2,12 +2,12 @@
 
 Complete reference for AI agents building NiceGUI applications.
 
-Source: https://github.com/Alyxion/nice-prompt
+Source: https://github.com/Alyxion/nice-vibes
 
 ---
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/nicegui_prompt.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/nicegui_prompt.md -->
 
 # NiceGUI Development Guide for AI Agents
 
@@ -31,12 +31,12 @@ Event handling documentation in the events folder:
 
 | Topic | File | Description |
 |-------|------|-------------|
-| **Element Events** | [element_events.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/events/element_events.md) | Base `.on()` handler, DOM events |
-| **Value Events** | [value_events.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/events/value_events.md) | `on_change` for inputs, selects, etc. |
-| **Button Events** | [button_events.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/events/button_events.md) | `on_click` for buttons |
-| **Keyboard Events** | [keyboard_events.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/events/keyboard_events.md) | Global keyboard handling |
-| **Lifecycle Events** | [lifecycle_events.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/events/lifecycle_events.md) | App/client lifecycle hooks |
-| **Upload Events** | [upload_events.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/events/upload_events.md) | File upload handling |
+| **Element Events** | [element_events.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/events/element_events.md) | Base `.on()` handler, DOM events |
+| **Value Events** | [value_events.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/events/value_events.md) | `on_change` for inputs, selects, etc. |
+| **Button Events** | [button_events.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/events/button_events.md) | `on_click` for buttons |
+| **Keyboard Events** | [keyboard_events.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/events/keyboard_events.md) | Global keyboard handling |
+| **Lifecycle Events** | [lifecycle_events.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/events/lifecycle_events.md) | App/client lifecycle hooks |
+| **Upload Events** | [upload_events.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/events/upload_events.md) | File upload handling |
 
 ## Core Mechanics
 
@@ -44,17 +44,17 @@ Essential patterns for building NiceGUI applications in the mechanics folder:
 
 | Topic | File | Description |
 |-------|------|-------------|
-| **Application Structure** | [application_structure.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/application_structure.md) | Project setup, `ui.run()`, main guard |
-| **Pages & Routing** | [pages.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/pages.md) | `@ui.page`, URL parameters, navigation |
-| **Container Updates** | [container_updates.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/container_updates.md) | Dynamic content with `clear()` + `with` |
-| **Event Binding** | [event_binding.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/event_binding.md) | Constructor vs method, `on_value_change` |
-| **Binding & State** | [binding_and_state.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/binding_and_state.md) | Data binding, refreshable UI |
-| **Data Modeling** | [data_modeling.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/data_modeling.md) | Dataclasses, per-user storage, dashboards |
-| **Styling** | [styling.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/styling.md) | `.classes()`, `.style()`, custom CSS |
-| **Background Execution** | [background_execution.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/background_execution.md) | `run.io_bound`, `background_tasks`, threading |
-| **Custom Components** | [custom_components.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/custom_components.md) | Building Python/JS components |
-| **Three.js Integration** | [threejs_integration.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/threejs_integration.md) | 3D rendering with Three.js |
-| **Coding Style** | [coding_style.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/coding_style.md) | NiceGUI conventions, formatting, type hints |
+| **Application Structure** | [application_structure.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/application_structure.md) | Project setup, `ui.run()`, main guard |
+| **Pages & Routing** | [pages.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/pages.md) | `@ui.page`, URL parameters, navigation |
+| **Container Updates** | [container_updates.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/container_updates.md) | Dynamic content with `clear()` + `with` |
+| **Event Binding** | [event_binding.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/event_binding.md) | Constructor vs method, `on_value_change` |
+| **Binding & State** | [binding_and_state.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/binding_and_state.md) | Data binding, refreshable UI |
+| **Data Modeling** | [data_modeling.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/data_modeling.md) | Dataclasses, per-user storage, dashboards |
+| **Styling** | [styling.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/styling.md) | `.classes()`, `.style()`, custom CSS |
+| **Background Execution** | [background_execution.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/background_execution.md) | `run.io_bound`, `background_tasks`, threading |
+| **Custom Components** | [custom_components.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/custom_components.md) | Building Python/JS components |
+| **Three.js Integration** | [threejs_integration.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/threejs_integration.md) | 3D rendering with Three.js |
+| **Coding Style** | [coding_style.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/coding_style.md) | NiceGUI conventions, formatting, type hints |
 
 ## Class Reference by Category
 
@@ -62,13 +62,13 @@ Find detailed documentation for each category in the classes folder:
 
 | Category | File | Description |
 |----------|------|-------------|
-| **Text Elements** | [text_elements.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/classes/text_elements.md) | Labels, links, markdown, HTML |
-| **Controls** | [controls.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/classes/controls.md) | Buttons, inputs, selects, sliders |
-| **Audiovisual** | [audiovisual.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/classes/audiovisual.md) | Images, audio, video, icons |
-| **Data Elements** | [data_elements.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/classes/data_elements.md) | Tables, charts, 3D scenes, maps |
-| **Layout** | [layout.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/classes/layout.md) | Containers, navigation, dialogs |
-| **App & Config** | [app_and_config.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/classes/app_and_config.md) | Storage, lifecycle, routing |
-| **Utilities** | [utilities.md](https://github.com/Alyxion/nice-prompt/blob/main/docs/classes/utilities.md) | Background tasks, testing, HTML |
+| **Text Elements** | [text_elements.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/classes/text_elements.md) | Labels, links, markdown, HTML |
+| **Controls** | [controls.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/classes/controls.md) | Buttons, inputs, selects, sliders |
+| **Audiovisual** | [audiovisual.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/classes/audiovisual.md) | Images, audio, video, icons |
+| **Data Elements** | [data_elements.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/classes/data_elements.md) | Tables, charts, 3D scenes, maps |
+| **Layout** | [layout.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/classes/layout.md) | Containers, navigation, dialogs |
+| **App & Config** | [app_and_config.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/classes/app_and_config.md) | Storage, lifecycle, routing |
+| **Utilities** | [utilities.md](https://github.com/Alyxion/nice-vibes/blob/main/docs/classes/utilities.md) | Background tasks, testing, HTML |
 
 ## Common Patterns
 
@@ -188,7 +188,7 @@ Check the `*_references.md` files for base class info:
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/poetry_setup.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/poetry_setup.md -->
 
 # Poetry Setup
 
@@ -289,7 +289,7 @@ poetry run python -c "import secrets; print(secrets.token_hex(32))"
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/application_structure.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/application_structure.md -->
 
 # NiceGUI Application Structure
 
@@ -615,7 +615,7 @@ if __name__ in {'__main__', '__mp_main__'}:
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/pages.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/pages.md -->
 
 # Pages and Routing in NiceGUI
 
@@ -818,7 +818,7 @@ This works via the 404 exception handler - unmatched URLs trigger the root page 
 2. Internal `/_nicegui/*` routes (uploads, static files) are matched next
 3. If nothing matches, the root page is served (if defined)
 
-See [Routing Architecture](https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/routing.md) for detailed explanation.
+See [Routing Architecture](https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/routing.md) for detailed explanation.
 
 ## Important Notes
 
@@ -830,7 +830,7 @@ See [Routing Architecture](https://github.com/Alyxion/nice-prompt/blob/main/docs
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/sub_pages.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/sub_pages.md -->
 
 # NiceGUI Sub Pages - Client-Side Routing
 
@@ -861,7 +861,7 @@ Client: ui.sub_pages matches '/about' → render about content
 
 This is why you **don't need** a catch-all `@ui.page('/{_:path}')` pattern - the root page mechanism already captures all URLs.
 
-See [Routing Architecture](https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/routing.md) for detailed explanation of route precedence.
+See [Routing Architecture](https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/routing.md) for detailed explanation of route precedence.
 
 ## Basic Usage
 
@@ -1038,7 +1038,7 @@ CustomSubPages({'/': home, '/about': about})
 
 Since sub pages only render **after** the parent page executes, authentication checks belong in the parent/layout page - not in individual sub pages.
 
-See [Authentication Pattern](https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/authentication.md) for a complete example with login page, session management, and role-based access.
+See [Authentication Pattern](https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/authentication.md) for a complete example with login page, session management, and role-based access.
 
 ## Layout Constraints
 
@@ -1164,7 +1164,7 @@ def root():
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/container_updates.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/container_updates.md -->
 
 # Updating Container Content in NiceGUI
 
@@ -1322,7 +1322,7 @@ ui.button('Add', on_click=add_item)
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/data_modeling.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/data_modeling.md -->
 
 # Data Modeling in NiceGUI
 
@@ -1517,7 +1517,7 @@ if __name__ in {'__main__', '__mp_main__'}:
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/binding_and_state.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/binding_and_state.md -->
 
 # NiceGUI Binding & State Management
 
@@ -1720,7 +1720,7 @@ data_changed.emit('new value')
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/event_binding.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/event_binding.md -->
 
 # Event Binding in NiceGUI
 
@@ -1812,7 +1812,7 @@ label.on('mouseleave', lambda: ui.notify('Left!'))
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/styling.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/styling.md -->
 
 # Styling in NiceGUI
 
@@ -2138,7 +2138,7 @@ ui.label('Adaptive').classes('text-black dark:text-white bg-white dark:bg-gray-8
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/background_execution.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/background_execution.md -->
 
 # Background Execution in NiceGUI
 
@@ -2576,13 +2576,13 @@ def process_data(callback, config, data):
 
 ## See Also
 
-- [Custom Components](https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/custom_components.md) - Building JS components that use background execution
-- [Three.js Integration](https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/threejs_integration.md) - Example of background rendering
+- [Custom Components](https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/custom_components.md) - Building JS components that use background execution
+- [Three.js Integration](https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/threejs_integration.md) - Example of background rendering
 - Sample: `samples/video_custom_component` - Complete example with video processing
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/custom_components.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/custom_components.md -->
 
 # Custom JavaScript/Vue Components
 
@@ -3122,7 +3122,7 @@ Dynamic routes are registered as real FastAPI routes, which are matched **before
 1. Request to `/_nicegui/client/.../upload/...` → matches the dynamic route
 2. Request to `/any/other/path` → no match → 404 handler → root page (if defined)
 
-See [Routing Architecture](https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/routing.md) for details on route precedence.
+See [Routing Architecture](https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/routing.md) for details on route precedence.
 
 ## Best Practices
 
@@ -3158,7 +3158,7 @@ element.update()
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/threejs_integration.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/threejs_integration.md -->
 
 # Three.js Integration
 
@@ -3419,7 +3419,7 @@ See `samples/threejs_tornado/` for a complete example with:
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/configuration_deployment.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/configuration_deployment.md -->
 
 # Configuration & Deployment
 
@@ -3679,7 +3679,7 @@ ui.run(
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/mechanics/coding_style.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/mechanics/coding_style.md -->
 
 # NiceGUI Coding Style Guide
 
@@ -3907,7 +3907,7 @@ async def _invoke_callback(self) -> None:
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/events/value_events.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/events/value_events.md -->
 
 # Value Events (ValueElement)
 
@@ -4032,7 +4032,7 @@ preview()
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/events/button_events.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/events/button_events.md -->
 
 # Button Events
 
@@ -4136,7 +4136,7 @@ ui.button('Go Home', on_click=lambda: ui.navigate.to('/'))
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/events/element_events.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/events/element_events.md -->
 
 # Element Events (ui.element)
 
@@ -4226,7 +4226,7 @@ button.on_click(handle_click)
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/events/lifecycle_events.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/events/lifecycle_events.md -->
 
 # Lifecycle Events
 
@@ -4358,7 +4358,7 @@ async def index():
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/events/keyboard_events.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/events/keyboard_events.md -->
 
 # Keyboard Events
 
@@ -4480,7 +4480,7 @@ ui.keyboard(on_key=navigate)
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/events/upload_events.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/events/upload_events.md -->
 
 # Upload Events
 
@@ -4614,7 +4614,7 @@ ui.upload(on_upload=save_file)
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/classes/controls.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/classes/controls.md -->
 
 # NiceGUI Controls
 
@@ -4719,7 +4719,7 @@ ui.codemirror('print("Hello")', language='python')
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/classes/layout.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/classes/layout.md -->
 
 # NiceGUI Layout Elements
 
@@ -4903,7 +4903,7 @@ ui.button('Hover me').tooltip('This is a tooltip')
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/classes/text_elements.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/classes/text_elements.md -->
 
 # NiceGUI Text Elements
 
@@ -4970,7 +4970,7 @@ ui.mermaid('''
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/classes/data_elements.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/classes/data_elements.md -->
 
 # NiceGUI Data Elements
 
@@ -5088,7 +5088,7 @@ ui.json_editor({'key': 'value', 'list': [1, 2, 3]})
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/classes/audiovisual.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/classes/audiovisual.md -->
 
 # NiceGUI Audiovisual Elements
 
@@ -5151,7 +5151,7 @@ ui.avatar('https://example.com/photo.jpg')
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/classes/app_and_config.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/classes/app_and_config.md -->
 
 # NiceGUI App & Configuration
 
@@ -5364,7 +5364,7 @@ ui.run(
 
 
 
-<!-- Source: https://github.com/Alyxion/nice-prompt/blob/main/docs/classes/utilities.md -->
+<!-- Source: https://github.com/Alyxion/nice-vibes/blob/main/docs/classes/utilities.md -->
 
 # NiceGUI Utilities
 
@@ -5528,7 +5528,7 @@ Reference implementations demonstrating NiceGUI patterns:
 
 ### dashboard
 
-**Location**: `https://github.com/Alyxion/nice-prompt/tree/main/samples/dashboard/`
+**Location**: `https://github.com/Alyxion/nice-vibes/tree/main/samples/dashboard/`
 
 Analytics dashboard showcasing 8 chart types and input controls with OO architecture.
 Demonstrates: Dashboard class with current(), DashboardData dataclass, ui.echart()
@@ -5538,7 +5538,7 @@ updates, ui.dialog() for settings, filter controls that update all charts/KPIs.
 
 ### threejs_tornado
 
-**Location**: `https://github.com/Alyxion/nice-prompt/tree/main/samples/threejs_tornado/`
+**Location**: `https://github.com/Alyxion/nice-vibes/tree/main/samples/threejs_tornado/`
 
 Three.js particle tornado with custom GLSL shaders using NiceGUI's bundled Three.js.
 Demonstrates: Element subclass with nicegui-scene module, WeakMap for Vue reactivity
@@ -5548,7 +5548,7 @@ But most importantly: How to visualize 3D scenes in NiceGUI.
 
 ### video_custom_component
 
-**Location**: `https://github.com/Alyxion/nice-prompt/tree/main/samples/video_custom_component/`
+**Location**: `https://github.com/Alyxion/nice-vibes/tree/main/samples/video_custom_component/`
 
 Custom JavaScript/Vue component with real-time video processing.
 Demonstrates: Element subclass with component='*.js', run_method(), run.io_bound(),
@@ -5558,7 +5558,7 @@ thread-safe state sharing, event-driven frame requests, base64 JPEG transfer.
 
 ### multi_dashboard
 
-**Location**: `https://github.com/Alyxion/nice-prompt/tree/main/samples/multi_dashboard/`
+**Location**: `https://github.com/Alyxion/nice-vibes/tree/main/samples/multi_dashboard/`
 
 Full SPA with authentication, signed cookie persistence, role-based permissions.
 Demonstrates: ui.sub_pages, AppLayout class, login page as sub_page, header/drawer
@@ -5569,7 +5569,7 @@ with signed cookies), pages/ (auto-discovered page modules), static/ (CSS/JS).
 
 ### stock_peers
 
-**Location**: `https://github.com/Alyxion/nice-prompt/tree/main/samples/stock_peers/`
+**Location**: `https://github.com/Alyxion/nice-vibes/tree/main/samples/stock_peers/`
 
 Stock comparison dashboard with async data loading.
 Demonstrates: dark mode, run.io_bound() for API calls, ui.echart(),
@@ -5578,7 +5578,7 @@ ui.chip() for toggles, ui.timer() for initial load, custom CSS.
 
 ### sub_pages_demo
 
-**Location**: `https://github.com/Alyxion/nice-prompt/tree/main/samples/sub_pages_demo/`
+**Location**: `https://github.com/Alyxion/nice-vibes/tree/main/samples/sub_pages_demo/`
 
 SPA navigation with persistent client state. Single-file demo of ui.sub_pages.
 Demonstrates: nested sub_pages, app.storage.client persistence, navigation drawer,
