@@ -2201,6 +2201,17 @@ workaround, custom vertex/fragment shaders, OrbitControls, real-time parameter u
 But most importantly: How to visualize 3D scenes in NiceGUI.
 
 
+### cone_spray
+
+**Location**: `https://github.com/Alyxion/nice-vibes/tree/main/samples/cone_spray/`
+
+Hollow cone nozzle spray with particle physics using Three.js.
+Demonstrates: Canvas texture for round particles (not square), emission accumulator
+for frame-rate-independent spawning, frustumCulled=false for dynamic particles,
+needsUpdate=true for BufferGeometry, multi-directional lighting for metallic materials,
+real-time physics (gravity, air resistance), interactive parameter controls.
+
+
 ### video_custom_component
 
 **Location**: `https://github.com/Alyxion/nice-vibes/tree/main/samples/video_custom_component/`

@@ -94,6 +94,15 @@ samples:
       workaround, custom vertex/fragment shaders, OrbitControls, real-time parameter updates.
       But most importantly: How to visualize 3D scenes in NiceGUI.
 
+  - name: cone_spray
+    path: samples/cone_spray/
+    summary: |
+      Hollow cone nozzle spray with particle physics using Three.js.
+      Demonstrates: Canvas texture for round particles (not square), emission accumulator
+      for frame-rate-independent spawning, frustumCulled=false for dynamic particles,
+      needsUpdate=true for BufferGeometry, multi-directional lighting for metallic materials,
+      real-time physics (gravity, air resistance), interactive parameter controls.
+
   - name: video_custom_component
     path: samples/video_custom_component/
     summary: |

@@ -9,6 +9,13 @@ Working example applications demonstrating NiceGUI patterns.
 <tr>
 <td align="center" valign="top" width="33%">
 <div style="height: 40px; display: flex; align-items: center; justify-content: center;">
+<a href="cone_spray/"><strong>Hollow Cone Nozzle Spray</strong></a>
+</div>
+<a href="cone_spray/"><img src="cone_spray/animated.gif" width="280"></a><br>
+<sub>A NiceGUI application using Three.js to visualize a hollow cone nozzle spraying particles with realistic physics.</sub>
+</td>
+<td align="center" valign="top" width="33%">
+<div style="height: 40px; display: flex; align-items: center; justify-content: center;">
 <a href="dashboard/"><strong>Analytics Dashboard</strong></a>
 </div>
 <a href="dashboard/"><img src="dashboard/screenshot.jpg" width="280"></a><br>
@@ -21,6 +28,8 @@ Working example applications demonstrating NiceGUI patterns.
 <a href="multi_dashboard/"><img src="multi_dashboard/screenshot.jpg" width="280"></a><br>
 <sub>A full SPA demonstrating authentication, signed cookie persistence, role-based permissions, and auto-discovered pages.</sub>
 </td>
+</tr>
+<tr>
 <td align="center" valign="top" width="33%">
 <div style="height: 40px; display: flex; align-items: center; justify-content: center;">
 <a href="stock_peers/"><strong>Stock Peer Analysis Dashboard</strong></a>
@@ -28,8 +37,6 @@ Working example applications demonstrating NiceGUI patterns.
 <a href="stock_peers/"><img src="stock_peers/screenshot.jpg" width="280"></a><br>
 <sub>Compare multiple stocks against their peer group average.</sub>
 </td>
-</tr>
-<tr>
 <td align="center" valign="top" width="33%">
 <div style="height: 40px; display: flex; align-items: center; justify-content: center;">
 <a href="sub_pages_demo/"><strong>Sub Pages Demo - Multi-App Navigation</strong></a>
@@ -44,6 +51,8 @@ Working example applications demonstrating NiceGUI patterns.
 <a href="threejs_tornado/"><img src="threejs_tornado/animated.gif" width="280"></a><br>
 <sub>A stunning 3D tornado particle system demonstrating advanced Three.js integration with NiceGUI.</sub>
 </td>
+</tr>
+<tr>
 <td align="center" valign="top" width="33%">
 <div style="height: 40px; display: flex; align-items: center; justify-content: center;">
 <a href="video_custom_component/"><strong>Video Custom Component</strong></a>
@@ -51,6 +60,8 @@ Working example applications demonstrating NiceGUI patterns.
 <a href="video_custom_component/"><img src="video_custom_component/animated.gif" width="280"></a><br>
 <sub>A comprehensive sample demonstrating **custom JavaScript components**, **background execution with `run.io_bound`**, and **real-time video processing** with OpenCV filters.</sub>
 </td>
+<td></td>
+<td></td>
 </tr>
 </table><!-- GALLERY_END -->
 

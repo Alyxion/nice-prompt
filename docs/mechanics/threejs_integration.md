@@ -245,6 +245,131 @@ const {
 3. **Don't redeclare `color` attribute** with `vertexColors: true`
 4. **Wait for `$nextTick`** before accessing `$refs.container` dimensions
 5. **Check for null state** in animate loop (component may unmount)
+6. **Component path is relative to Python file** - `component='scene.js'` looks for `scene.js` in the same directory as the Python file, not the project root
+
+## Particle Systems
+
+Particle systems require special handling for visibility and performance.
+
+### Frustum Culling
+
+Three.js culls objects outside the camera frustum. For particle systems that move dynamically, this can cause particles to disappear unexpectedly:
+
+```javascript
+const particles = new THREE.Points(geometry, material);
+particles.frustumCulled = false;  // Prevent disappearing particles
+state.scene.add(particles);
+```
+
+### Dynamic BufferGeometry
+
+When modifying particle positions at runtime:
+
+```javascript
+// After updating positions
+geometry.attributes.position.needsUpdate = true;
+
+// For dynamic geometry, also update bounding sphere
+geometry.computeBoundingSphere();
+```
+
+### Emission Accumulator Pattern
+
+For smooth particle emission at variable frame rates:
+
+```javascript
+let emissionAccumulator = 0;
+const emissionRate = 100; // particles per second
+
+function animate() {
+  const delta = clock.getDelta();
+  emissionAccumulator += delta * emissionRate;
+  
+  while (emissionAccumulator >= 1) {
+    emitParticle();
+    emissionAccumulator -= 1;
+  }
+}
+```
+
+### Round Particles with Canvas Textures
+
+`PointsMaterial` renders square points by default. For round/spherical particles:
+
+```javascript
+function createParticleTexture(size = 64) {
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  
+  // Radial gradient for soft glow
+  const gradient = ctx.createRadialGradient(
+    size/2, size/2, 0,
+    size/2, size/2, size/2
+  );
+  gradient.addColorStop(0, 'rgba(255,255,255,1)');
+  gradient.addColorStop(0.3, 'rgba(255,200,100,0.8)');
+  gradient.addColorStop(1, 'rgba(255,100,0,0)');
+  
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, size, size);
+  
+  return new THREE.CanvasTexture(canvas);
+}
+
+const material = new THREE.PointsMaterial({
+  size: 1.0,
+  map: createParticleTexture(),
+  transparent: true,
+  blending: THREE.AdditiveBlending,
+  depthWrite: false,
+});
+```
+
+Alternatively, use a custom shader with `gl_PointCoord` (see tornado sample).
+
+## Lighting for Metallic Materials
+
+`MeshStandardMaterial` with high `metalness` requires proper lighting or it appears black:
+
+```javascript
+// BAD: Metallic material with weak lighting = black object
+const material = new THREE.MeshStandardMaterial({
+  color: 0xcccccc,
+  metalness: 0.9,
+  roughness: 0.1,
+});
+
+// GOOD: Add strong multi-directional lighting
+function setupLighting(scene) {
+  // Hemisphere light for ambient fill
+  const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 1.0);
+  scene.add(hemi);
+  
+  // Multiple directional lights for reflections
+  const positions = [
+    [5, 10, 5],
+    [-5, 10, -5],
+    [0, -10, 0],
+  ];
+  
+  positions.forEach(([x, y, z]) => {
+    const light = new THREE.DirectionalLight(0xffffff, 0.8);
+    light.position.set(x, y, z);
+    scene.add(light);
+  });
+}
+```
+
+For highly reflective metals, consider adding an environment map:
+
+```javascript
+const envMap = new THREE.CubeTextureLoader().load([
+  'px.jpg', 'nx.jpg', 'py.jpg', 'ny.jpg', 'pz.jpg', 'nz.jpg'
+]);
+material.envMap = envMap;
+material.envMapIntensity = 1.0;
+```
 
 ## Example: Particle System
 

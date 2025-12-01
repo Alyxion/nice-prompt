@@ -22,7 +22,9 @@ my_component/
 
 ### Python Side
 
-Subclass `Element` and specify the JavaScript component file:
+Subclass `Element` and specify the JavaScript component file.
+
+**Important**: The `component=` path is **relative to the Python file**, not the project root. Place the `.js` file in the same directory as the Python class, or use a relative path like `component='js/counter.js'`.
 
 ```python
 from nicegui.element import Element
