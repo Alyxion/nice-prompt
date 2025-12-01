@@ -115,20 +115,24 @@ package-mode = false  # IMPORTANT: Prevents "Readme path does not exist" errors
 
 [tool.poetry.dependencies]
 python = "^3.12"
-nicegui = "^2.0"
+nicegui = "^3.3.1"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 ```
 
-**Files to create BEFORE `poetry install`:**
+Always use the newest NiceGUI version, currently 3.3.1 or above via `poetry add nicegui`.
+
+**The following files should be created BEFORE `poetry install`:**
 1. `README.md` - Required by Poetry (even a one-liner is fine)
 2. `pyproject.toml` - With `package-mode = false` for applications
 3. `main.py` - Your application entry point
 4. `AGENTS.md` - Copy from: `https://raw.githubusercontent.com/Alyxion/nice-vibes/refs/heads/main/docs/mechanics/AGENTS.md`
 
 The `AGENTS.md` file contains project rules for AI agents. Always add it to new projects if one doesn't exist yet.
+
+Retrieve recommended folder structure from: `https://raw.githubusercontent.com/Alyxion/nice-vibes/refs/heads/main/docs/mechanics/application_structure.md`
 
 Never use plain `pip install` or `requirements.txt`.
 

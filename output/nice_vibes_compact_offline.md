@@ -31,6 +31,8 @@ poetry init
 poetry add nicegui
 ```
 
+Always use the newest NiceGUI version, currently 3.3.1 or above via `poetry add nicegui`.
+
 **Basic Poetry project structure:**
 
 ```
@@ -431,6 +433,7 @@ my_app/
 ├── static/              # Static files (images, CSS)
 ├── requirements.txt
 └── pyproject.toml
+└── AGENTS.md
 ```
 
 ### SPA with Sub Pages (Recommended for Dashboards)
@@ -458,6 +461,7 @@ my_app/
 │   └── js/
 │       └── app.js           # Custom JavaScript
 └── pyproject.toml
+└── AGENTS.md
 ```
 
 ### Separation of Concerns

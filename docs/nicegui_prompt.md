@@ -22,6 +22,8 @@ poetry init
 poetry add nicegui
 ```
 
+Always use the newest NiceGUI version, currently 3.3.1 or above via `poetry add nicegui`.
+
 **Basic Poetry project structure:**
 
 ```

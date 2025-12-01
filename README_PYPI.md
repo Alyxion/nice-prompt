@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Alyxion/nice-vibes/main/samples/showcase.gif" alt="Sample Applications">
+  <img src="https://raw.githubusercontent.com/Alyxion/nice-vibes/main/samples/showcase.gif" alt="Sample Applications" width="600">
 </p>
 
 A comprehensive toolkit of prompts, patterns, and examples that help AI coding assistants generate correct, idiomatic [NiceGUI](https://nicegui.io/) code.
