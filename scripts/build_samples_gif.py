@@ -201,9 +201,27 @@ def build_gif() -> None:
                 all_frames.extend(frames)
                 all_durations.extend([int(1000 / ANIMATED_FPS)] * len(frames))
             else:
-                # Fallback to static
-                all_frames.append(load_static_frame(screenshot))
-                all_durations.append(STATIC_DURATION_MS)
+                # Try to use existing animated.gif if capture failed
+                existing_gif = sample_dir / 'animated.gif'
+                if existing_gif.exists():
+                    print(f'  Using existing animated.gif for {name}')
+                    gif = Image.open(existing_gif)
+                    try:
+                        while True:
+                            frame = gif.copy()
+                            # Resize to showcase width
+                            ratio = MAX_WIDTH / frame.width
+                            new_height = int(frame.height * ratio)
+                            frame = frame.resize((MAX_WIDTH, new_height), Image.Resampling.LANCZOS)
+                            all_frames.append(frame)
+                            all_durations.append(gif.info.get('duration', int(1000 / ANIMATED_FPS)))
+                            gif.seek(gif.tell() + 1)
+                    except EOFError:
+                        pass
+                else:
+                    # Fallback to static
+                    all_frames.append(load_static_frame(screenshot))
+                    all_durations.append(STATIC_DURATION_MS)
         else:
             print(f'  Adding: {name} (static)')
             all_frames.append(load_static_frame(screenshot))
