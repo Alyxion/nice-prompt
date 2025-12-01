@@ -4,6 +4,32 @@ This document helps AI coding agents build NiceGUI applications correctly.
 
 ## Quick Start
 
+### New Project Setup (Always Use Poetry)
+
+When creating a new NiceGUI project, **always use Poetry** for dependency management:
+
+```bash
+poetry new my-app
+cd my-app
+poetry add nicegui
+```
+
+Or for an existing directory:
+
+```bash
+cd my-app
+poetry init
+poetry add nicegui
+```
+
+Run your app with:
+
+```bash
+poetry run python main.py
+```
+
+### Minimal Example
+
 ```python
 from nicegui import ui
 
