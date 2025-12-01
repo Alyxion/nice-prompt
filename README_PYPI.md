@@ -101,15 +101,31 @@ Each variant is available in **online** (GitHub URLs) and **offline** (local pat
 
 Configure file order and summaries in `docs/prompt_config.yaml`.
 
-## ✅ Validation
+## 🖥️ Command Line Interface
+
+Nice Vibes includes a CLI to explore and run sample applications:
 
 ```bash
-# Validate class references
-poetry run python scripts/validate_classes.py
+# Install the package
+pip install nice-vibes
 
-# Also check URLs
-poetry run python scripts/validate_classes.py --check-urls
+# Interactive sample selector
+nice-vibes
+
+# List available samples
+nice-vibes list
+
+# Run a sample
+nice-vibes run dashboard
+
+# Copy sample source code to current directory
+nice-vibes copy dashboard
+nice-vibes copy video_custom_component -o my_video_app
 ```
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Alyxion/nice-vibes/main/assets/cli_preview.png" alt="CLI Preview" width="600">
+</p>
 
 ## 🙏 Credits
 

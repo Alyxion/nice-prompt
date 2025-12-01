@@ -1,13 +1,13 @@
 [project]
 name = "nice-vibes"
-version = "0.1.0"
+version = "0.1.1"
 description = "Developing beautiful NiceGUI applications with AI"
 authors = [
     {name = "Michael Ikemann", email = "michael.ikemann@gmail.com"}
 ]
 readme = "README_PYPI.md"
 license = {text = "MIT"}
-requires-python = ">=3.12"
+requires-python = ">=3.12,<4.0"
 keywords = [
     "nicegui",
     "ai",
@@ -36,6 +36,7 @@ dependencies = [
     "yfinance>=0.2.66,<0.3.0",
     "pillow>=12.0.0,<13.0.0",
     "opencv-python>=4.12.0.88,<5.0.0.0",
+    "pyyaml>=6.0",
 ]
 
 [project.urls]
@@ -44,8 +45,14 @@ Documentation = "https://github.com/Alyxion/nice-vibes#readme"
 Repository = "https://github.com/Alyxion/nice-vibes.git"
 Issues = "https://github.com/Alyxion/nice-vibes/issues"
 
+[project.scripts]
+nice-vibes = "nice_vibes.cli:main"
+
 [tool.poetry]
-packages = [{include = "scripts"}]
+packages = [
+    {include = "nice_vibes"},
+    {include = "samples"},
+]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

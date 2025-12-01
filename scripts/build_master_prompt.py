@@ -245,13 +245,14 @@ def build_samples_section(config: dict, github_url: str, online: bool) -> str:
     lines = [
         '\n---\n',
         '## Sample Applications\n',
-        'Reference implementations demonstrating NiceGUI patterns:\n',
+        'Reference implementations demonstrating NiceGUI patterns. Search by tags to find relevant samples.\n',
     ]
     
     for sample in samples:
         name = sample.get('name', '')
         path = sample.get('path', '')
         summary = sample.get('summary', '').strip()
+        tags = sample.get('tags', [])
         
         if online:
             ref = f'{github_url}/tree/main/{path}'
@@ -260,6 +261,8 @@ def build_samples_section(config: dict, github_url: str, online: bool) -> str:
         
         lines.append(f'\n### {name}\n')
         lines.append(f'**Location**: `{ref}`\n')
+        if tags:
+            lines.append(f'**Tags**: {", ".join(f"#{t}" for t in tags)}\n')
         if summary:
             lines.append(f'{summary}\n')
     

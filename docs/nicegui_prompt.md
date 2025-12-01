@@ -22,11 +22,24 @@ poetry init
 poetry add nicegui
 ```
 
+**Basic Poetry project structure:**
+
+```
+my-app/
+├── my_app/              # Package folder (underscore, not hyphen)
+│   └── __init__.py      # Required for Python package
+├── main.py              # Entry point with ui.run()
+├── pyproject.toml       # Poetry config (auto-generated)
+└── README.md            # Project documentation
+```
+
 Run your app with:
 
 ```bash
 poetry run python main.py
 ```
+
+If the user does not have installed Poetry yet, you can guide him here: https://python-poetry.org/docs/
 
 ### Minimal Example
 
@@ -37,7 +50,42 @@ ui.label('Hello World')
 ui.button('Click me', on_click=lambda: ui.notify('Clicked!'))
 
 if __name__ in {'__main__', '__mp_main__'}:
+    ui.run(title='My App', show=False)
+```
+
+Remark: For professioal applications do not build the root context but use the ui.page() decorator instead, example:
+
+```python
+from nicegui import ui
+
+@ui.page('/')
+def index():
+    ui.label('Hello World')
+    ui.button('Click me', on_click=lambda: ui.notify('Clicked!'))
+
+if __name__ in {'__main__', '__mp_main__'}:
     ui.run(show=False)
+```
+
+For an even more ambitious projects use object orientation and build a class for each page. As an initializer can not be async we usually define a build() method that is called after the object is initialized. Example:
+
+```python
+from nicegui import ui
+
+class Page:
+    def __init__(self):
+        pass
+
+    async def build(self):
+        ui.label('Hello World')
+        ui.button('Click me', on_click=lambda: ui.notify('Clicked!'))
+
+@ui.page('/')
+async def index():
+    await Page().build()
+
+if __name__ in {'__main__', '__mp_main__'}:
+    ui.run(title='My App', show=False)
 ```
 
 ## Events
@@ -196,6 +244,10 @@ Check the `*_references.md` files for base class info:
 - **DisableableElement**: Can be disabled with `.disable()`/`.enable()`
 - **ValidationElement**: Supports `validation` parameter
 - **ChoiceElement**: Selection elements (radio, select, toggle)
+
+## Sample Applications
+
+When implementing a feature, **search the Sample Applications section by tags** to find relevant reference implementations. Each sample includes tags like `#charts`, `#authentication`, `#threejs`, `#custom-component`, `#spa`, etc. that help identify which sample demonstrates the pattern you need.
 
 ---
 

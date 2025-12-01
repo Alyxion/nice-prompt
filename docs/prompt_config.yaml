@@ -80,6 +80,7 @@ exclude:
 samples:
   - name: dashboard
     path: samples/dashboard/
+    tags: [charts, echart, dashboard, analytics, dark-mode, timer, dialog, filters, dataclass, oo-architecture]
     summary: |
       Analytics dashboard showcasing 8 chart types and input controls with OO architecture.
       Demonstrates: Dashboard class with current(), DashboardData dataclass, ui.echart()
@@ -88,6 +89,7 @@ samples:
 
   - name: threejs_tornado
     path: samples/threejs_tornado/
+    tags: [threejs, 3d, particles, shaders, glsl, animation, webgl, custom-element, orbit-controls, visualization]
     summary: |
       Three.js particle tornado with custom GLSL shaders using NiceGUI's bundled Three.js.
       Demonstrates: Element subclass with nicegui-scene module, WeakMap for Vue reactivity
@@ -96,6 +98,7 @@ samples:
 
   - name: cone_spray
     path: samples/cone_spray/
+    tags: [threejs, 3d, particles, physics, simulation, canvas-texture, buffer-geometry, lighting, animation, interactive]
     summary: |
       Hollow cone nozzle spray with particle physics using Three.js.
       Demonstrates: Canvas texture for round particles (not square), emission accumulator
@@ -105,6 +108,7 @@ samples:
 
   - name: video_custom_component
     path: samples/video_custom_component/
+    tags: [custom-component, javascript, vue, video, opencv, background-tasks, io-bound, threading, base64, real-time]
     summary: |
       Custom JavaScript/Vue component with real-time video processing.
       Demonstrates: Element subclass with component='*.js', run_method(), run.io_bound(),
@@ -113,6 +117,7 @@ samples:
 
   - name: multi_dashboard
     path: samples/multi_dashboard/
+    tags: [authentication, spa, sub-pages, cookies, permissions, roles, auto-discovery, layout, drawer, header]
     summary: |
       Full SPA with authentication, signed cookie persistence, role-based permissions.
       Demonstrates: ui.sub_pages, AppLayout class, login page as sub_page, header/drawer
@@ -122,6 +127,7 @@ samples:
 
   - name: stock_peers
     path: samples/stock_peers/
+    tags: [stocks, finance, async, io-bound, echart, chips, dark-mode, api, yfinance, comparison]
     summary: |
       Stock comparison dashboard with async data loading.
       Demonstrates: dark mode, run.io_bound() for API calls, ui.echart(),
@@ -129,6 +135,7 @@ samples:
 
   - name: sub_pages_demo
     path: samples/sub_pages_demo/
+    tags: [spa, sub-pages, navigation, storage, persistence, drawer, nested-routes, timer, state, client-storage]
     summary: |
       SPA navigation with persistent client state. Single-file demo of ui.sub_pages.
       Demonstrates: nested sub_pages, app.storage.client persistence, navigation drawer,

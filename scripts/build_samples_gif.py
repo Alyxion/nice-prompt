@@ -25,8 +25,8 @@ OUTPUT_FILE = SAMPLES_DIR / 'showcase.gif'
 STATIC_DURATION_MS = 2500  # 2.5 seconds for static screenshots
 ANIMATED_DURATION_S = 3  # 3 seconds recording for animated samples
 ANIMATED_FPS = 20  # Frames per second for animated samples
-MAX_WIDTH = 600  # Compress to this width
-GALLERY_WIDTH = 280  # Width for gallery thumbnails
+MAX_WIDTH = 800  # Compress to this width (showcase GIF)
+GALLERY_WIDTH = 560  # Width for gallery thumbnails (individual sample GIFs)
 MAX_COLORS = 128  # Color palette size
 PORT = 8080
 

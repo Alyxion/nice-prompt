@@ -31,11 +31,24 @@ poetry init
 poetry add nicegui
 ```
 
+**Basic Poetry project structure:**
+
+```
+my-app/
+├── my_app/              # Package folder (underscore, not hyphen)
+│   └── __init__.py      # Required for Python package
+├── main.py              # Entry point with ui.run()
+├── pyproject.toml       # Poetry config (auto-generated)
+└── README.md            # Project documentation
+```
+
 Run your app with:
 
 ```bash
 poetry run python main.py
 ```
+
+If the user does not have installed Poetry yet, you can guide him here: https://python-poetry.org/docs/
 
 ### Minimal Example
 
@@ -46,7 +59,42 @@ ui.label('Hello World')
 ui.button('Click me', on_click=lambda: ui.notify('Clicked!'))
 
 if __name__ in {'__main__', '__mp_main__'}:
+    ui.run(title='My App', show=False)
+```
+
+Remark: For professioal applications do not build the root context but use the ui.page() decorator instead, example:
+
+```python
+from nicegui import ui
+
+@ui.page('/')
+def index():
+    ui.label('Hello World')
+    ui.button('Click me', on_click=lambda: ui.notify('Clicked!'))
+
+if __name__ in {'__main__', '__mp_main__'}:
     ui.run(show=False)
+```
+
+For an even more ambitious projects use object orientation and build a class for each page. As an initializer can not be async we usually define a build() method that is called after the object is initialized. Example:
+
+```python
+from nicegui import ui
+
+class Page:
+    def __init__(self):
+        pass
+
+    async def build(self):
+        ui.label('Hello World')
+        ui.button('Click me', on_click=lambda: ui.notify('Clicked!'))
+
+@ui.page('/')
+async def index():
+    await Page().build()
+
+if __name__ in {'__main__', '__mp_main__'}:
+    ui.run(title='My App', show=False)
 ```
 
 ## Events
@@ -205,6 +253,10 @@ Check the `*_references.md` files for base class info:
 - **DisableableElement**: Can be disabled with `.disable()`/`.enable()`
 - **ValidationElement**: Supports `validation` parameter
 - **ChoiceElement**: Selection elements (radio, select, toggle)
+
+## Sample Applications
+
+When implementing a feature, **search the Sample Applications section by tags** to find relevant reference implementations. Each sample includes tags like `#charts`, `#authentication`, `#threejs`, `#custom-component`, `#spa`, etc. that help identify which sample demonstrates the pattern you need.
 
 ---
 
@@ -3150,6 +3202,71 @@ Dynamic routes are registered as real FastAPI routes, which are matched **before
 
 See [Routing Architecture](docs/mechanics/routing.md) for details on route precedence.
 
+## Push vs Pull: Avoiding Bandwidth Bottlenecks
+
+**Critical**: When sending large binary data (e.g., base64-encoded images, video frames) from Python to JavaScript, pushing data faster than the client can consume it will cause the system to halt.
+
+### ❌ Push Pattern (Dangerous for High-Frequency Updates)
+
+```python
+# BAD - Server pushes frames as fast as possible
+def send_frames(self):
+    while True:
+        frame = capture_frame()
+        base64_data = encode_to_base64(frame)
+        self.run_method('updateFrame', base64_data)  # May overwhelm client!
+        time.sleep(0.016)  # 60 FPS attempt
+```
+
+This fails because:
+- Network latency varies
+- Client may be busy rendering
+- WebSocket buffer fills up → connection stalls
+
+### ✅ Pull Pattern (Safe for High-Frequency Updates)
+
+Let the browser request data when it's ready:
+
+```javascript
+// JavaScript - Client pulls when ready
+export default {
+  mounted() {
+    this.requestNextFrame();
+  },
+  methods: {
+    requestNextFrame() {
+      this.$emit('frame-request');  // Ask Python for next frame
+    },
+    updateFrame(base64Data) {
+      this.imageData = base64Data;
+      // Request next frame only after current one is processed
+      requestAnimationFrame(() => this.requestNextFrame());
+    },
+  },
+};
+```
+
+```python
+# Python - Server responds to requests
+class AnimatedImage(Element, component='animated_image.js'):
+    def __init__(self) -> None:
+        super().__init__()
+        self.on('frame-request', self._handle_frame_request)
+    
+    async def _handle_frame_request(self, e) -> None:
+        frame = await run.io_bound(self._get_frame)
+        self.run_method('updateFrame', frame)
+```
+
+### When to Use Each Pattern
+
+| Pattern | Use Case |
+|---------|----------|
+| **Push** | Small, infrequent updates (notifications, status changes) |
+| **Pull** | Large binary data, high-frequency updates (video, animations) |
+
+See `samples/video_custom_component` for a complete pull-based implementation.
+
 ## Best Practices
 
 1. **Cleanup in unmounted** - Always destroy third-party library instances
@@ -3159,6 +3276,7 @@ See [Routing Architecture](docs/mechanics/routing.md) for details on route prece
 5. **Handle async initialization** - Use `mounted()` for setup that needs DOM
 6. **Validate props** - Define prop types in JavaScript
 7. **Clean up dynamic routes** - Always call `app.remove_route()` in `_handle_delete()`
+8. **Use pull pattern for large data** - Let the client request data when ready to avoid bandwidth bottlenecks
 
 ## Debugging
 
@@ -5674,12 +5792,14 @@ with ui.card() as card:
 
 ## Sample Applications
 
-Reference implementations demonstrating NiceGUI patterns:
+Reference implementations demonstrating NiceGUI patterns. Search by tags to find relevant samples.
 
 
 ### dashboard
 
 **Location**: `samples/dashboard/`
+
+**Tags**: #charts, #echart, #dashboard, #analytics, #dark-mode, #timer, #dialog, #filters, #dataclass, #oo-architecture
 
 Analytics dashboard showcasing 8 chart types and input controls with OO architecture.
 Demonstrates: Dashboard class with current(), DashboardData dataclass, ui.echart()
@@ -5691,6 +5811,8 @@ updates, ui.dialog() for settings, filter controls that update all charts/KPIs.
 
 **Location**: `samples/threejs_tornado/`
 
+**Tags**: #threejs, #3d, #particles, #shaders, #glsl, #animation, #webgl, #custom-element, #orbit-controls, #visualization
+
 Three.js particle tornado with custom GLSL shaders using NiceGUI's bundled Three.js.
 Demonstrates: Element subclass with nicegui-scene module, WeakMap for Vue reactivity
 workaround, custom vertex/fragment shaders, OrbitControls, real-time parameter updates.
@@ -5700,6 +5822,8 @@ But most importantly: How to visualize 3D scenes in NiceGUI.
 ### cone_spray
 
 **Location**: `samples/cone_spray/`
+
+**Tags**: #threejs, #3d, #particles, #physics, #simulation, #canvas-texture, #buffer-geometry, #lighting, #animation, #interactive
 
 Hollow cone nozzle spray with particle physics using Three.js.
 Demonstrates: Canvas texture for round particles (not square), emission accumulator
@@ -5712,6 +5836,8 @@ real-time physics (gravity, air resistance), interactive parameter controls.
 
 **Location**: `samples/video_custom_component/`
 
+**Tags**: #custom-component, #javascript, #vue, #video, #opencv, #background-tasks, #io-bound, #threading, #base64, #real-time
+
 Custom JavaScript/Vue component with real-time video processing.
 Demonstrates: Element subclass with component='*.js', run_method(), run.io_bound(),
 background_tasks.create(), ui.timer() for async polling, 16 OpenCV filters,
@@ -5721,6 +5847,8 @@ thread-safe state sharing, event-driven frame requests, base64 JPEG transfer.
 ### multi_dashboard
 
 **Location**: `samples/multi_dashboard/`
+
+**Tags**: #authentication, #spa, #sub-pages, #cookies, #permissions, #roles, #auto-discovery, #layout, #drawer, #header
 
 Full SPA with authentication, signed cookie persistence, role-based permissions.
 Demonstrates: ui.sub_pages, AppLayout class, login page as sub_page, header/drawer
@@ -5733,6 +5861,8 @@ with signed cookies), pages/ (auto-discovered page modules), static/ (CSS/JS).
 
 **Location**: `samples/stock_peers/`
 
+**Tags**: #stocks, #finance, #async, #io-bound, #echart, #chips, #dark-mode, #api, #yfinance, #comparison
+
 Stock comparison dashboard with async data loading.
 Demonstrates: dark mode, run.io_bound() for API calls, ui.echart(),
 ui.chip() for toggles, ui.timer() for initial load, custom CSS.
@@ -5741,6 +5871,8 @@ ui.chip() for toggles, ui.timer() for initial load, custom CSS.
 ### sub_pages_demo
 
 **Location**: `samples/sub_pages_demo/`
+
+**Tags**: #spa, #sub-pages, #navigation, #storage, #persistence, #drawer, #nested-routes, #timer, #state, #client-storage
 
 SPA navigation with persistent client state. Single-file demo of ui.sub_pages.
 Demonstrates: nested sub_pages, app.storage.client persistence, navigation drawer,

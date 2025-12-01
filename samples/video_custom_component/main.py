@@ -18,6 +18,14 @@ This sample demonstrates three key NiceGUI patterns:
    - 16 selectable filters with configurable parameters
    - Synchronized multi-view display
 
+Usage:
+    python main.py [VIDEO_URL_OR_PATH]
+
+Examples:
+    python main.py                           # Uses video.mp4 in current directory
+    python main.py /path/to/video.mp4        # Uses local file
+    python main.py https://example.com/v.mp4 # Uses URL (streamed)
+
 Video source: https://www.pexels.com/video/traffic-flow-in-the-highway-2103099/
 Download the video and save as video.mp4 in this directory.
 """
@@ -34,10 +42,7 @@ from nicegui import app, background_tasks, run, ui
 
 from animated_image import AnimatedImage
 from filters import DEFAULT_FILTERS, apply_filter, get_filter_names
-
-# Video file path
-VIDEO_DIR = Path(__file__).parent
-VIDEO_FILE = VIDEO_DIR / 'video.mp4'
+from video_source import VIDEO_SOURCE
 
 # Display settings
 DISPLAY_WIDTH = 960
@@ -68,13 +73,16 @@ class VideoState:
         return app.storage.client['video_state']
 
 
-def read_video_loop(state: VideoState, video_path: Path) -> None:
+def read_video_loop(state: VideoState, video_source: str) -> None:
     """Read video frames in endless loop.
     
     Runs in background thread. Uses microsleeps with accumulated timing
     to maintain accurate frame rate without drift.
+    
+    :param state: Shared video state
+    :param video_source: File path (URLs are pre-downloaded at startup)
     """
-    cap = cv2.VideoCapture(str(video_path))
+    cap = cv2.VideoCapture(video_source)
     
     if not cap.isOpened():
         return
@@ -165,18 +173,20 @@ def index():
     # Load external CSS
     ui.add_head_html('<link rel="stylesheet" href="/static/app.css">')
     
-    # Check if video exists
-    if not VIDEO_FILE.exists():
+    # Check if video source is valid
+    if not Path(VIDEO_SOURCE).exists():
         with ui.column().classes('w-full min-h-screen items-center justify-center p-8'):
             with ui.card().classes('bg-gray-800 text-white p-6 max-w-xl'):
-                ui.label('Video Not Found').classes('text-xl font-bold text-red-400 mb-4')
-                ui.markdown('''
-**To use this demo, download a video:**
+                ui.label('Video Not Available').classes('text-xl font-bold text-red-400 mb-4')
+                ui.markdown(f'''
+**Failed to load video source.**
 
-1. Save any MP4 video as `video.mp4` in this directory
-2. Refresh this page
+Check the console for download errors, or provide a video manually:
 
-See README.md for a recommended free video source.
+```
+python main.py /path/to/video.mp4
+python main.py https://example.com/video.mp4
+```
                 ''')
         return
     
@@ -186,7 +196,7 @@ See README.md for a recommended free video source.
     
     # Start video reader in background thread
     async def start_reader():
-        await run.io_bound(read_video_loop, state, VIDEO_FILE)
+        await run.io_bound(read_video_loop, state, VIDEO_SOURCE)
     
     background_tasks.create(start_reader())
     
